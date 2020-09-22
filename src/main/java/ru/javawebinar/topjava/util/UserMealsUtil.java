@@ -35,6 +35,7 @@ public class UserMealsUtil {
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloryByDate = new HashMap<>();
+
         for (UserMeal meal : meals) {
             caloryByDate.merge(meal.getDateTime().toLocalDate(), meal.getCalories(), Integer::sum);
         }
@@ -63,7 +64,7 @@ public class UserMealsUtil {
 
         for (UserMeal meal : meals) {
             LocalDateTime mealDateTime = meal.getDateTime();
-            LocalDate mealDate = LocalDate.from(mealDateTime);
+            LocalDate mealDate = mealDateTime.toLocalDate();
             int calories = meal.getCalories();
 
             caloryByDate.merge(mealDate, calories, Integer::sum);
@@ -90,16 +91,16 @@ public class UserMealsUtil {
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloryByDate = meals.stream()
                 .collect(Collectors.groupingBy(
-                        x -> LocalDate.from(x.getDateTime()),
+                        meal -> LocalDate.from(meal.getDateTime()),
                         Collectors.summingInt(UserMeal::getCalories)
                 ));
 
-        Predicate<UserMeal> itInBounds = x -> isBetweenHalfOpen(
-                x.getDateTime().toLocalTime(),
+        Predicate<UserMeal> itInBounds = meal -> isBetweenHalfOpen(
+                meal.getDateTime().toLocalTime(),
                 startTime, endTime
         );
-        Function<UserMeal, Boolean[]> getExcess = x -> new Boolean[]{
-                caloryByDate.get(LocalDate.from(x.getDateTime())) > caloriesPerDay
+        Function<UserMeal, Boolean[]> getExcess = meal -> new Boolean[]{
+                caloryByDate.get(LocalDate.from(meal.getDateTime())) > caloriesPerDay
         };
 
         return meals.stream()
@@ -108,7 +109,8 @@ public class UserMealsUtil {
                         meal.getDateTime(),
                         meal.getDescription(),
                         meal.getCalories(),
-                        getExcess.apply(meal)))
+                        getExcess.apply(meal))
+                )
                 .collect(LinkedList::new, LinkedList::add, LinkedList::addAll);
     }
 }
