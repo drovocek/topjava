@@ -15,6 +15,10 @@ public class Meal extends AbstractBaseEntity {
     public Meal() {
     }
 
+    public Meal(Meal meal) {
+        this(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.calories);
+    }
+
     public Meal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
     }
@@ -56,23 +60,6 @@ public class Meal extends AbstractBaseEntity {
 
     public void setCalories(int calories) {
         this.calories = calories;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Meal meal = (Meal) o;
-        return id.equals(meal.id) &&
-                calories == meal.calories &&
-                dateTime.equals(meal.dateTime) &&
-                Objects.equals(description, meal.description);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), id);
     }
 
     @Override
