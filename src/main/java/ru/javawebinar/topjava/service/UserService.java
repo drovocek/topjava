@@ -37,6 +37,7 @@ public class UserService {
     public List<User> getAll() {
         return repository.getAll();
     }
+
     public void update(User user) {
         checkNotFoundWithId(repository.save(user), user.getId());
     }
