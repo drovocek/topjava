@@ -37,9 +37,6 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        System.out.println("--------");
-        System.out.println(userId);
-        System.out.println("--------");
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("userId", userId)
                 .addValue("id", meal.getId())

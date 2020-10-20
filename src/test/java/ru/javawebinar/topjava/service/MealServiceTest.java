@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
@@ -74,7 +75,7 @@ public class MealServiceTest {
     public void update() {
         Meal updated = getUserUpdated();
         service.update(updated, USER_ID);
-        assertMatch(service.get(USER_FIRST_MEAL_ID, USER_ID), updated);
+        assertMatch(service.get(updated.getId(), USER_ID), getUserUpdated());
     }
 
     @Test
@@ -95,9 +96,10 @@ public class MealServiceTest {
         Meal newMeal = getNew();
         Meal created = service.create(newMeal, USER_ID);
         Integer newId = created.getId();
-        newMeal.setId(newId);
-        assertMatch(created, newMeal);
-        assertMatch(service.get(newId, USER_ID), newMeal);
+        Meal expected = getNew();
+        expected.setId(newId);
+        assertMatch(created, expected);
+        assertMatch(service.get(newId, USER_ID), expected);
     }
 
     @Test
@@ -110,25 +112,21 @@ public class MealServiceTest {
     @Test
     public void getAll() {
         List<Meal> all = service.getAll(USER_ID);
-        assertMatch(all, getUserMealList(meal -> true));
+        List<Meal> expected = Arrays.asList(userMeal7, userMeal6, userMeal5, userMeal4, userMeal3, userMeal2, userMeal1);
+        assertMatch(all, expected);
     }
 
     @Test
     public void getBetweenInclusive() {
         List<Meal> actual = service.getBetweenInclusive(BORDER_DATE, BORDER_DATE, USER_ID);
-        assertMatch(actual, getUserMealList(meal -> meal.getDate().equals(BORDER_DATE)));
+        List<Meal> expected = Arrays.asList(userMeal3, userMeal2, userMeal1);
+        assertMatch(actual, expected);
     }
 
     @Test
     public void getBetweenInclusiveForFreeBoarders() {
         List<Meal> actual = service.getBetweenInclusive(null, null, USER_ID);
-        assertMatch(actual, getUserMealList(meal -> true));
-    }
-
-    public static List<Meal> getUserMealList(Predicate<Meal> filter) {
-        return Stream.of(userMeal1, userMeal2, userMeal3, userMeal4, userMeal5, userMeal6, userMeal7)
-                .filter(filter)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+        List<Meal> expected = Arrays.asList(userMeal7, userMeal6, userMeal5, userMeal4, userMeal3, userMeal2, userMeal1);
+        assertMatch(actual, expected);
     }
 }
