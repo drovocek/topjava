@@ -5,14 +5,4 @@
 
     <context:component-scan base-package="ru.javawebinar.topjava.repository.inmemory"/>
 
-    <context:component-scan base-package="ru.javawebinar.**.service"/>
-
-    <bean class="ru.javawebinar.topjava.web.user.AdminRestController" id="adminRestController"/>
-
-<!--    <bean class="ru.javawebinar.topjava.repository.inmemory.InMemoryUserRepository" id="inMemoryUserRepository"/>-->
-
-    <!--    <bean class="ru.javawebinar.topjava.service.UserService" id="userService">-->
-    <!--        <constructor-arg name="repository" ref="inmemoryUserRepository"/>-->
-    <!--    </bean>-->
-
 </beans>
