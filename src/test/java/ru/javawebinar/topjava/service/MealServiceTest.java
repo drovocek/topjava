@@ -1,6 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.AssumptionViolatedException;
+import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Stopwatch;
@@ -15,10 +15,11 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import javax.persistence.NoResultException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
@@ -34,53 +35,45 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
+    private static final Map<Long, String> allTimeInfo = new TreeMap<>();
 
     @Autowired
     private MealService service;
 
-    private static void logInfo(Description description, String status, long nanos) {
-        String testName = description.getMethodName();
-        log.info(String.format("<<<Test %s %s, spent %d microseconds>>>",
-                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos)));
-    }
-
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
-        protected void succeeded(long nanos, Description description) {
-            logInfo(description, "succeeded", nanos);
-        }
-
-        @Override
-        protected void failed(long nanos, Throwable e, Description description) {
-            logInfo(description, "failed", nanos);
-        }
-
-        @Override
-        protected void skipped(long nanos, AssumptionViolatedException e, Description description) {
-            logInfo(description, "skipped", nanos);
-        }
-
-        @Override
-        protected void finished(long nanos, Description description) {
-            logInfo(description, "finished", nanos);
+        protected void finished(long millis, Description description) {
+            Long duration = TimeUnit.NANOSECONDS.toMillis(millis);
+            String testName = description.getMethodName();
+            String timeInfo = String.format("<<<Test %s() %s, spent %d milliseconds>>>",
+                    testName, "finished", duration);
+            allTimeInfo.put(duration, timeInfo);
+            log.info("\nTEST EXECUTION TIME:");
+            log.info(timeInfo + "\n");
         }
     };
+
+    @AfterClass
+    public static void logResume() {
+        log.info("\nTESTS EXECUTION TIME:");
+        allTimeInfo.forEach((key, value) -> System.out.println(value));
+    }
 
     @Test
     public void delete() throws Exception {
         service.delete(MEAL1_ID, USER_ID);
-        assertThrows(NoResultException.class, () -> service.get(MEAL1_ID, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, USER_ID));
     }
 
     @Test
     public void deleteNotFound() throws Exception {
-        assertThrows(NoResultException.class, () -> service.delete(NOT_FOUND, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND, USER_ID));
     }
 
     @Test
     public void deleteNotOwn() throws Exception {
-        assertThrows(NoResultException.class, () -> service.delete(MEAL1_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(MEAL1_ID, ADMIN_ID));
     }
 
     @Test
@@ -108,12 +101,12 @@ public class MealServiceTest {
 
     @Test
     public void getNotFound() throws Exception {
-        assertThrows(NoResultException.class, () -> service.get(NOT_FOUND, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, USER_ID));
     }
 
     @Test
     public void getNotOwn() throws Exception {
-        assertThrows(NoResultException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
     }
 
     @Test
@@ -125,7 +118,7 @@ public class MealServiceTest {
 
     @Test
     public void updateNotOwn() throws Exception {
-        assertThrows(NoResultException.class, () -> service.update(meal1, ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
     }
 
     @Test

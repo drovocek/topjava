@@ -11,8 +11,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -48,12 +48,12 @@ public class UserServiceTest {
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        assertThrows(NoResultException.class, () -> service.get(USER_ID));
+        assertThrows(NotFoundException.class, () -> service.get(USER_ID));
     }
 
     @Test
     public void deletedNotFound() throws Exception {
-        assertThrows(NoResultException.class, () -> service.delete(NOT_FOUND));
+        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class UserServiceTest {
 
     @Test
     public void getNotFound() throws Exception {
-        assertThrows(NoResultException.class, () -> service.get(NOT_FOUND));
+        assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND));
     }
 
     @Test
