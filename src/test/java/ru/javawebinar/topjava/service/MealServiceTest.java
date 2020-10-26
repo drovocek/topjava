@@ -42,13 +42,14 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
-    private static String getTableResult(String... row){
-        String tableRowFormat = "    %-25s %-5d %-5s";
-        StringBuilder table = new StringBuilder("\n    ---------------------\n");
-        table.append("\n    TEST EXECUTION TIME:\n");
-        table.append("\n    ---------------------\n");
-        table.append(String.format(tableRowFormat, "Name", "Duration","Unit"));
-        Arrays.stream(row)
+    private static String getTableTimeResult(String... rows) {
+        String tableRowFormat = "    %-25s %-10s %-5s";
+        String separator = "\n    ------------------------------------------\n";
+        StringBuilder table = new StringBuilder("\n    TEST EXECUTION TIME:");
+        table.append(separator);
+        table.append(String.format(tableRowFormat, "Name", "Duration", "Unit"));
+        table.append(separator);
+        Arrays.stream(rows).forEach(table::append);
         return table.toString();
     }
 
@@ -58,20 +59,16 @@ public class MealServiceTest {
         protected void finished(long millis, Description description) {
             Long duration = TimeUnit.NANOSECONDS.toMillis(millis);
             String testName = description.getMethodName();
-            String timeInfo = String.format("    %-25s %-5d ms",
-                    testName, duration);
+            String timeInfo = String.format("    %-25s %-10d %-5s\n",
+                    testName, duration, "ms");
             allTimeInfo.put(duration, timeInfo);
-            log.info("\n    TEST EXECUTION TIME:\n    ---------------------\n" + timeInfo + "\n");
+            log.info(getTableTimeResult(timeInfo));
         }
     };
 
     @AfterClass
     public static void logResume() {
-        String resume = allTimeInfo.values().stream().reduce(
-                "\n    TESTS EXECUTION TIME:\n    ---------------------\n",
-                (s1, s2) -> s1 + s2 + "\n"
-        );
-        log.info(resume);
+        log.info(getTableTimeResult(allTimeInfo.values().toArray(new String[0])));
     }
 
     @Test
