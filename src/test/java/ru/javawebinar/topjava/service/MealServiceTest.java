@@ -19,7 +19,8 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
@@ -46,18 +47,20 @@ public class MealServiceTest {
         protected void finished(long millis, Description description) {
             Long duration = TimeUnit.NANOSECONDS.toMillis(millis);
             String testName = description.getMethodName();
-            String timeInfo = String.format("<<<Test %s() %s, spent %d milliseconds>>>",
-                    testName, "finished", duration);
+            String timeInfo = String.format("    %s() - %d milliseconds",
+                    testName, duration);
             allTimeInfo.put(duration, timeInfo);
-            log.info("\nTEST EXECUTION TIME:");
-            log.info(timeInfo + "\n");
+            log.info("\n    TEST EXECUTION TIME:\n    ---------------------\n" + timeInfo + "\n");
         }
     };
 
     @AfterClass
     public static void logResume() {
-        log.info("\nTESTS EXECUTION TIME:");
-        allTimeInfo.forEach((key, value) -> System.out.println(value));
+        String resume = allTimeInfo.values().stream().reduce(
+                "\n    TESTS EXECUTION TIME:\n    ---------------------\n",
+                (s1, s2) -> s1 + s2 + "\n"
+        );
+        log.info(resume);
     }
 
     @Test
@@ -91,7 +94,6 @@ public class MealServiceTest {
         assertThrows(DataAccessException.class, () ->
                 service.create(new Meal(null, meal1.getDateTime(), "duplicate", 100), USER_ID));
     }
-
 
     @Test
     public void get() throws Exception {
