@@ -19,6 +19,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -41,13 +42,23 @@ public class MealServiceTest {
     @Autowired
     private MealService service;
 
+    private static String getTableResult(String... row){
+        String tableRowFormat = "    %-25s %-5d %-5s";
+        StringBuilder table = new StringBuilder("\n    ---------------------\n");
+        table.append("\n    TEST EXECUTION TIME:\n");
+        table.append("\n    ---------------------\n");
+        table.append(String.format(tableRowFormat, "Name", "Duration","Unit"));
+        Arrays.stream(row)
+        return table.toString();
+    }
+
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long millis, Description description) {
             Long duration = TimeUnit.NANOSECONDS.toMillis(millis);
             String testName = description.getMethodName();
-            String timeInfo = String.format("    %s() - %d milliseconds",
+            String timeInfo = String.format("    %-25s %-5d ms",
                     testName, duration);
             allTimeInfo.put(duration, timeInfo);
             log.info("\n    TEST EXECUTION TIME:\n    ---------------------\n" + timeInfo + "\n");
