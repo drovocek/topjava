@@ -34,7 +34,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-//@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class)
 //@Profile(value = "jpa")
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
