@@ -26,6 +26,10 @@ public class MealServlet extends HttpServlet {
     private ConfigurableApplicationContext springContext;
     private MealRestController mealController;
 
+    static{
+        System.setProperty("spring.profiles.active", "postgres, jdbc");
+    }
+
     @Override
     public void init() {
         springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
