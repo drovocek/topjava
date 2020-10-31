@@ -44,6 +44,7 @@ public class JdbcMealRepository implements MealRepository {
     @Override
     public Meal save(Meal meal, int userId) {
         Object dateTime = (activeProfiles.equals("hsqldb")) ? Timestamp.valueOf(meal.getDateTime()) : meal.getDateTime();
+
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())

@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.User;
 
+import javax.transaction.NotSupportedException;
 import java.util.List;
 
 public interface UserRepository {
@@ -18,4 +19,8 @@ public interface UserRepository {
     User getByEmail(String email);
 
     List<User> getAll();
+
+    default User getWithAllMeal(int id) {
+        throw new UnsupportedOperationException("method is not supported");
+    }
 }

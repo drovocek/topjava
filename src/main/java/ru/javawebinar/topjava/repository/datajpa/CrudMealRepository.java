@@ -30,4 +30,7 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     List<Meal> getAllSorted(
             @Param("userId") int userId
     );
+
+    @Query("SELECT m FROM Meal m JOIN FETCH m.user WHERE m.id = :id")
+    Meal getWithUser(@Param("id") int id);
 }

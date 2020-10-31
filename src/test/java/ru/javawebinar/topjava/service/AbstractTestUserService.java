@@ -50,7 +50,7 @@ public abstract class AbstractTestUserService {
     };
 
     @Autowired
-    private UserService service;
+    protected UserService service;
 
     @AfterClass
     public static void printResult() {

@@ -11,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
+
 @Repository
 @Transactional(readOnly = true)
 public class DataJpaMealRepository implements MealRepository {
@@ -54,5 +56,11 @@ public class DataJpaMealRepository implements MealRepository {
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return crudRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
+    }
+
+    @Override
+    public Meal getWithUser(int id, int userId) {
+        Meal meal = crudRepository.findById(id).orElse(null);
+        return meal != null && meal.getUser().getId() == userId ? crudRepository.getWithUser(id) : null;
     }
 }
