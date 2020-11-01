@@ -51,8 +51,7 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     @OrderBy("dateTime desc")
-    @JoinColumn(name = "user_id")
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
     private List<Meal> meals;
 
     @Column(name = "calories_per_day", nullable = false, columnDefinition = "int default 2000")
