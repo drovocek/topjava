@@ -20,7 +20,7 @@ import java.util.List;
 @Repository
 public class JdbcMealRepository implements MealRepository {
 
-    @Value("${spring.profiles.active:}")
+    @Value("${spring.profiles.active:hsqldb}")
     private String profile;
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
@@ -42,8 +42,6 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        System.out.println(profile.contains("hsqldb"));
-        System.out.println(profile);
         LocalDateTime mealDT = meal.getDateTime();
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
@@ -86,8 +84,6 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        System.out.println(profile.contains("hsqldb"));
-        System.out.println(profile);
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
                 ROW_MAPPER,
