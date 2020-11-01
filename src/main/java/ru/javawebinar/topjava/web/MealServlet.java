@@ -26,7 +26,7 @@ public class MealServlet extends HttpServlet {
     private MealRestController mealController;
 
     static{
-        System.setProperty("spring.profiles.active", "postgres, jdbc");
+        System.setProperty("spring.profiles.active", "hsqldb, jdbc");
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.List;
 public class SpringMain {
 
     static {
-        System.setProperty("spring.profiles.active", "postgres, jdbc");
+        System.setProperty("spring.profiles.active", "hsqldb, jdbc");
     }
 
     public static void main(String[] args) {

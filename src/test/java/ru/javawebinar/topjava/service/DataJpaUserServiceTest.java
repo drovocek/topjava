@@ -11,7 +11,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_MATCHER;
 
 @ActiveProfiles(profiles = {"hsqldb", "datajpa"})
-public class DataJpaTestUserService extends AbstractTestUserService {
+public class DataJpaUserServiceTest extends AbstractTestUserService {
 
     @Test
     public void getWithAllMeal() {

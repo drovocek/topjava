@@ -1,5 +1,8 @@
 package ru.javawebinar.topjava;
 
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
+
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,5 +28,19 @@ public class TestMatcher<T> {
 
     public void assertMatch(Iterable<T> actual, Iterable<T> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields(fieldsToIgnore).isEqualTo(expected);
+    }
+
+    public static <T> T initializeAndUnproxy(T entity) {
+        if (entity == null) {
+            throw new
+                    NullPointerException("Entity passed for initialization is null");
+        }
+
+        Hibernate.initialize(entity);
+        if (entity instanceof HibernateProxy) {
+            entity = (T) ((HibernateProxy) entity).getHibernateLazyInitializer()
+                    .getImplementation();
+        }
+        return entity;
     }
 }

@@ -51,7 +51,7 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     @OrderBy("dateTime desc")
-    @JoinColumn(name="id")
+    @JoinColumn(name = "user_id")
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Meal> meals;
 

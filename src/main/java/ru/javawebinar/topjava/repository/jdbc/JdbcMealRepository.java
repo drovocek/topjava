@@ -21,7 +21,7 @@ import java.util.List;
 public class JdbcMealRepository implements MealRepository {
 
     @Value("${spring.profiles.active:}")
-    private String activeProfiles;
+    private String profile;
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
@@ -36,20 +36,20 @@ public class JdbcMealRepository implements MealRepository {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
-
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        Object dateTime = (activeProfiles.equals("hsqldb")) ? Timestamp.valueOf(meal.getDateTime()) : meal.getDateTime();
-
+        System.out.println(profile.contains("hsqldb"));
+        System.out.println(profile);
+        LocalDateTime mealDT = meal.getDateTime();
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
-                .addValue("date_time", dateTime)
+                .addValue("date_time", profile.contains("hsqldb") ? Timestamp.valueOf(mealDT) : mealDT)
                 .addValue("user_id", userId);
 
         if (meal.isNew()) {
@@ -86,10 +86,13 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        Object dateTimeStart = (activeProfiles.equals("hsqldb")) ? Timestamp.valueOf(startDateTime) : startDateTime;
-        Object dateTimeEnd = (activeProfiles.equals("hsqldb")) ? Timestamp.valueOf(endDateTime) : endDateTime;
+        System.out.println(profile.contains("hsqldb"));
+        System.out.println(profile);
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time >=  ? AND date_time < ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, dateTimeStart, dateTimeEnd);
+                ROW_MAPPER,
+                userId,
+                profile.contains("hsqldb") ? Timestamp.valueOf(startDateTime) : startDateTime,
+                profile.contains("hsqldb") ? Timestamp.valueOf(endDateTime) : endDateTime);
     }
 }
