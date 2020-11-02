@@ -12,7 +12,7 @@ import static ru.javawebinar.topjava.MealTestData.MEAL_MATCHER;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_MATCHER;
 
-@ActiveProfiles(profiles = {Profiles.HSQL_DB, Profiles.DATAJPA})
+@ActiveProfiles(profiles = Profiles.DATAJPA)
 public class DataJpaUserServiceTest extends AbstractTestUserService {
 
     @Test
