@@ -51,7 +51,7 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     @OrderBy("dateTime desc")
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user")
     private List<Meal> meals;
 
     @Column(name = "calories_per_day", nullable = false, columnDefinition = "int default 2000")
@@ -80,11 +80,11 @@ public class User extends AbstractNamedEntity {
     }
 
     public List<Meal> getMeals() {
-        return List.copyOf(meals);
+        return meals == null ? null : List.copyOf(meals);
     }
 
     public void setMeals(List<Meal> meals) {
-        this.meals = List.copyOf(meals);
+        this.meals = meals == null ? null : List.copyOf(meals);
     }
 
     public String getEmail() {
