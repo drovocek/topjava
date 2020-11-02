@@ -1,14 +1,16 @@
-package ru.javawebinar.topjava.service;
+package ru.javawebinar.topjava.service.datajpa;
 
 import org.junit.Test;
 import org.springframework.test.context.ActiveProfiles;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.TestMatcher;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.AbstractTestMealService;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ActiveProfiles(profiles = {"hsqldb", "datajpa"})
+@ActiveProfiles(profiles = {Profiles.HSQL_DB, Profiles.DATAJPA})
 public class DataJpaMealServiceTest extends AbstractTestMealService {
 
     @Test
