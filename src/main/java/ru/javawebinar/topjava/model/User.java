@@ -80,11 +80,11 @@ public class User extends AbstractNamedEntity {
     }
 
     public List<Meal> getMeals() {
-        return meals == null ? null : List.copyOf(meals);
+        return meals == null ? new ArrayList<>() : List.copyOf(meals);
     }
 
     public void setMeals(List<Meal> meals) {
-        this.meals = meals == null ? null : List.copyOf(meals);
+        this.meals = meals == null ? new ArrayList<>() : List.copyOf(meals);
     }
 
     public String getEmail() {

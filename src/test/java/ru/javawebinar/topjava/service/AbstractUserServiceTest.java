@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-public abstract class AbstractTestUserService extends AbstractServiceTestContext {
+public abstract class AbstractUserServiceTest extends AbstractServiceTestContext {
 
     @Autowired
     protected UserService service;
@@ -82,6 +82,6 @@ public abstract class AbstractTestUserService extends AbstractServiceTestContext
     @Test
     public void getAll() {
         List<User> all = service.getAll();
-        USER_MATCHER.assertMatch(all, admin, user);
+        USER_MATCHER.assertMatch(all, admin, user, userWhithoutMeal);
     }
 }
