@@ -82,6 +82,6 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTestContext
     @Test
     public void getAll() {
         List<User> all = service.getAll();
-        USER_MATCHER.assertMatch(all, admin, user, userWhithoutMeal);
+        USER_MATCHER.assertMatch(all, admin, user);
     }
 }

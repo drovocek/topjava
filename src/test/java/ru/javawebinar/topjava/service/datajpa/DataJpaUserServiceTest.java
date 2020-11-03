@@ -5,6 +5,7 @@ import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.UserTestData;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.AbstractUserServiceTest;
 
@@ -25,8 +26,9 @@ public class DataJpaUserServiceTest extends AbstractUserServiceTest {
 
     @Test
     public void getWithAllMealForUserWhithoutMeal() {
-        User user = service.getWithAllMeal(USER_WHITHOUT_MEAL_ID);
-        USER_MATCHER.assertMatch(user, UserTestData.userWhithoutMeal);
-        MEAL_MATCHER.assertMatch(user.getMeals(), new ArrayList<>());
+        User newUserWhithoutMeal = service.create(getNew());
+        User userWhithoutMeal = service.getWithAllMeal(newUserWhithoutMeal.getId());
+        USER_MATCHER.assertMatch(userWhithoutMeal, newUserWhithoutMeal);
+        MEAL_MATCHER.assertMatch(userWhithoutMeal.getMeals(), new ArrayList<>());
     }
 }

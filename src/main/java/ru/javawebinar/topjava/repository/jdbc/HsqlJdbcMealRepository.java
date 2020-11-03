@@ -7,9 +7,14 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.Profiles;
 
 @Repository
-@Profile({Profiles.HSQL_DB})
+@Profile(Profiles.HSQL_DB)
 public class HsqlJdbcMealRepository extends AbstractJdbcMealRepository {
     public HsqlJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         super(jdbcTemplate, namedParameterJdbcTemplate);
+    }
+
+    @Override
+    public boolean isHsqldb() {
+        return true;
     }
 }

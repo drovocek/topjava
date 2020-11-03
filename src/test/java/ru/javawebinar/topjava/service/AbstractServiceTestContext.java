@@ -47,5 +47,6 @@ public abstract class AbstractServiceTestContext {
                 "\n---------------------------------" +
                 results +
                 "\n---------------------------------");
+        results.setLength(0);
     }
 }
