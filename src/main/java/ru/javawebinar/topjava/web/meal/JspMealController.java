@@ -1,10 +1,10 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
@@ -12,9 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
-import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller("/meals")
 public class JspMealController extends AbstractMealController {
@@ -44,7 +41,6 @@ public class JspMealController extends AbstractMealController {
             Model model
     ) {
         Meal meal = (id == null) ? new Meal() : get(id);
-
         model.addAttribute("meal", meal);
         return "mealForm";
     }
@@ -57,19 +53,13 @@ public class JspMealController extends AbstractMealController {
 
     @GetMapping(value = "/meals", params = {"startDate", "endDate", "startTime", "endTime"})
     public String filterMeals(
-            @RequestParam(name = "startDate") String startFilterDate,
-            @RequestParam(name = "endDate") String endFilterDate,
-            @RequestParam(name = "startTime") String startFilterTime,
-            @RequestParam(name = "endTime") String endFilterTime,
+            @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @RequestParam(name = "startTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
+            @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+            @RequestParam(name = "endTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime endTime,
             Model model
     ) {
-        LocalDate startDate = parseLocalDate(startFilterDate);
-        LocalDate endDate = parseLocalDate(endFilterDate);
-        LocalTime startTime = parseLocalTime(startFilterTime);
-        LocalTime endTime = parseLocalTime(endFilterTime);
-
         List<MealTo> meals = getBetween(startDate, startTime, endDate, endTime);
-
         model.addAttribute("meals", meals);
         return "meals";
     }
