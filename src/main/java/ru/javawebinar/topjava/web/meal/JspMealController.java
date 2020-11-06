@@ -1,10 +1,11 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
@@ -35,7 +36,7 @@ public class JspMealController extends AbstractMealController {
         return "redirect:meals";
     }
 
-    @PostMapping(value = "/meals")
+    @GetMapping(value = "/meals/mealForm")
     public String getMealForm(
             @RequestParam(name = "id", required = false) Integer id,
             Model model
