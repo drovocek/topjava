@@ -31,7 +31,7 @@ import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
 abstract public class AbstractServiceTest {
 
     @Autowired
-    protected Environment environment;
+    private Environment environment;
 
     @ClassRule
     public static ExternalResource summary = TimingRules.SUMMARY;
@@ -52,6 +52,6 @@ abstract public class AbstractServiceTest {
 
     public boolean containProfiles(String... profile){
         List<String> activeProfiles = Arrays.asList(environment.getActiveProfiles());
-        return Arrays.stream(profile).allMatch(p-> activeProfiles.contains(p));
+        return Arrays.stream(profile).allMatch(activeProfiles::contains);
     }
 }
