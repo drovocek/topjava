@@ -36,7 +36,7 @@ public class JspMealController extends AbstractMealController {
         return "redirect:meals";
     }
 
-    @GetMapping(value = "/meals/mealForm")
+    @GetMapping(value = "/meals/mealform")
     public String getMealForm(
             @RequestParam(name = "id", required = false) Integer id,
             Model model
