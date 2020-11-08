@@ -8,7 +8,6 @@
 <head>
     <jsp:include page="fragments/headTag.jsp"/>
     <title>Meals</title>
-    <link rel="stylesheet" href="resources/css/style.css">
 </head>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
@@ -35,7 +34,7 @@
         <button type="submit"><spring:message code="common.filter"/></button>
     </form>
     <hr/>
-    <a href="meals/mealForm?action=create"><spring:message code="meal.addMeal"/></a>
+    <a href="meals/mealform?action=create"><spring:message code="meal.addMeal"/></a>
     <br><br>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>

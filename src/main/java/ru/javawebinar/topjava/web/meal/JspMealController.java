@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
@@ -14,10 +15,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-@Controller("/meals")
+@RequestMapping(value = "/meals")
+@Controller
 public class JspMealController extends AbstractMealController {
 
-    @PostMapping(value = "/meals", params = {"id", "dateTime", "description", "calories"})
+    @PostMapping(params = {"id", "dateTime", "description", "calories"})
     public String saveMeal(
             @RequestParam(name = "id", required = false) Integer id,
             @RequestParam(name = "dateTime") String dateTime,
@@ -36,7 +38,7 @@ public class JspMealController extends AbstractMealController {
         return "redirect:meals";
     }
 
-    @GetMapping(value = "/meals/mealform")
+    @GetMapping(value = "/mealform")
     public String getMealForm(
             @RequestParam(name = "id", required = false) Integer id,
             Model model
@@ -46,13 +48,13 @@ public class JspMealController extends AbstractMealController {
         return "mealForm";
     }
 
-    @GetMapping(value = "/meals", params = "id")
+    @GetMapping(params = "id")
     public String deleteMeal(@RequestParam(name = "id") Integer id) {
         delete(id);
         return "redirect:meals";
     }
 
-    @GetMapping(value = "/meals", params = {"startDate", "endDate", "startTime", "endTime"})
+    @GetMapping(params = {"startDate", "endDate", "startTime", "endTime"})
     public String filterMeals(
             @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(name = "startTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
@@ -65,7 +67,7 @@ public class JspMealController extends AbstractMealController {
         return "meals";
     }
 
-    @GetMapping(value = "/meals")
+    @GetMapping
     public String getMeals(Model model) {
         model.addAttribute("meals", getAll());
         return "meals";
