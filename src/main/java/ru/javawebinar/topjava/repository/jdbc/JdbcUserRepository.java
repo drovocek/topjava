@@ -15,9 +15,12 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.validation.Valid;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
+
+import static ru.javawebinar.topjava.util.ValidationUtil.jdbcEntityValidation;
 
 @Repository
 @Transactional
@@ -43,10 +46,10 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
-    public User save(User user) {
+    public User save(@Valid User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         List<Role> roles = List.copyOf(user.getRoles());
-        System.out.println(roles);
+        jdbcEntityValidation(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
@@ -73,8 +76,8 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", USER_ROW_MAPPER, id);
-        List<Role> roles = jdbcTemplate.query("SELECT * FROM user_roles WHERE user_id=?", ROLE_ROW_MAPPER, id);
         User user = DataAccessUtils.singleResult(users);
+        List<Role> roles = jdbcTemplate.query("SELECT * FROM user_roles WHERE user_id=?", ROLE_ROW_MAPPER, id);
         if (user != null) {
             user.setRoles(Set.copyOf(roles));
         }

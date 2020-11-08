@@ -3,8 +3,17 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validator;
+import java.util.Set;
+
 public class ValidationUtil {
-    private ValidationUtil() {
+
+    private static Validator validator;
+
+    private ValidationUtil(Validator val) {
+        validator = val;
     }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
@@ -51,5 +60,10 @@ public class ValidationUtil {
             result = cause;
         }
         return result;
+    }
+
+    public static <T> void jdbcEntityValidation(T entity) {
+        Set<ConstraintViolation<T>> violations = validator.validate(entity);
+        if (violations.size() > 0) throw new ConstraintViolationException(violations);
     }
 }
