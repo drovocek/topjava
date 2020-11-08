@@ -133,4 +133,12 @@
         <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
         <jpa:repositories base-package="ru.javawebinar.**.repository.datajpa"/>
     </beans>
+
+
+    <beans profile="test">
+        <bean id="noOptCash" class="org.springframework.cache.support.NoOpCacheManager"/>
+<!--        <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">-->
+
+<!--        </bean>-->
+    </beans>
 </beans>

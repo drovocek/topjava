@@ -9,10 +9,11 @@ import ru.javawebinar.topjava.service.AbstractCashableUserServiceTest;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
+import static ru.javawebinar.topjava.Profiles.TEST;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_MATCHER;
 
-@ActiveProfiles(DATAJPA)
+@ActiveProfiles({DATAJPA, TEST})
 public class DataJpaUserServiceServiceTest extends AbstractCashableUserServiceTest {
     @Test
     public void getWithMeals() {

@@ -4,7 +4,8 @@ public class Profiles {
     public static final String
             JDBC = "jdbc",
             JPA = "jpa",
-            DATAJPA = "datajpa";
+            DATAJPA = "datajpa",
+            TEST = "test";
 
     public static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
 
