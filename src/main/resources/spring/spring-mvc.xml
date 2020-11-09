@@ -33,4 +33,38 @@
         <property name="basenames" value="file:///#{systemEnvironment['TOPJAVA_ROOT']}/config/messages/app"/>
         <property name="fallbackToSystemLocale" value="false"/>
     </bean>
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="registerDefaultFormatters" value="false" />
+        <property name="formatters">
+            <set>
+                <bean class="org.springframework.format.number.NumberFormatAnnotationFormatterFactory" />
+            </set>
+        </property>
+        <property name="formatterRegistrars">
+            <set>
+                <bean class="org.springframework.format.datetime.standard.DateTimeFormatterRegistrar">
+<!--                    <property name="useIsoFormat" value="true"/>-->
+<!--                    <property name="dateFormatter" value="ISO_DATE"/>-->
+<!--                    <property name="timeFormatter" value="ISO_TIME"/>-->
+<!--                    <property name="dateTimeFormatter" value="ISO_DATE_TIME"/>-->
+<!--                    <property name="dateFormatter">-->
+<!--                        <bean class="org.springframework.format.datetime.standard.DateTimeFormatterFactoryBean">-->
+<!--                            <property name="iso" value="DATE"/>-->
+<!--                        </bean>-->
+<!--                    </property>-->
+<!--                    <property name="timeFormatter">-->
+<!--                        <bean class="org.springframework.format.datetime.standard.DateTimeFormatterFactoryBean">-->
+<!--                            <property name="iso" value="TIME"/>-->
+<!--                        </bean>-->
+<!--                    </property>-->
+<!--                    <property name="dateTimeFormatter">-->
+<!--                        <bean class="org.springframework.format.datetime.standard.DateTimeFormatterFactoryBean">-->
+<!--                            <property name="iso" value="DATE_TIME"/>-->
+<!--                        </bean>-->
+<!--                    </property>-->
+                </bean>
+            </set>
+        </property>
+    </bean>
 </beans>

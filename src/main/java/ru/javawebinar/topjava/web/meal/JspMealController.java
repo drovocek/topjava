@@ -13,6 +13,7 @@ import ru.javawebinar.topjava.to.MealTo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RequestMapping(value = "/meals")
@@ -22,14 +23,14 @@ public class JspMealController extends AbstractMealController {
     @PostMapping(value = "/save")
     public String save(
             @RequestParam(name = "id", required = false) Integer id,
-            @RequestParam(name = "dateTime") String dateTime,
+            @RequestParam(name = "dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
             @RequestParam(name = "description") String description,
             @RequestParam(name = "calories") Integer calories
     ) {
-        Meal meal = new Meal(LocalDateTime.parse(dateTime), description, calories);
+        Meal meal = new Meal(dateTime, description, calories);
         meal.setId(id);
 
-        if (id == null) {
+        if (meal.isNew()) {
             create(meal);
         } else {
             update(meal, id);
@@ -43,7 +44,9 @@ public class JspMealController extends AbstractMealController {
             @RequestParam(name = "id", required = false) Integer id,
             Model model
     ) {
-        Meal meal = (id == null) ? new Meal(LocalDateTime.now(),"new meal", 777) : get(id);
+        Meal meal = (id == null) ?
+                new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
+                get(id);
         model.addAttribute("meal", meal);
         return "mealForm";
     }
@@ -56,10 +59,14 @@ public class JspMealController extends AbstractMealController {
 
     @GetMapping(value = "/filter")
     public String filter(
-            @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-            @RequestParam(name = "startTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
-            @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
-            @RequestParam(name = "endTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime endTime,
+            @RequestParam(name = "startDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(name = "startTime", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
+            @RequestParam(name = "endDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(name = "endTime", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime,
             Model model
     ) {
         List<MealTo> meals = getBetween(startDate, startTime, endDate, endTime);
