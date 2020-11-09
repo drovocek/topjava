@@ -19,8 +19,8 @@ import java.util.List;
 @Controller
 public class JspMealController extends AbstractMealController {
 
-    @PostMapping(params = {"id", "dateTime", "description", "calories"})
-    public String saveMeal(
+    @PostMapping(value = "/save")
+    public String save(
             @RequestParam(name = "id", required = false) Integer id,
             @RequestParam(name = "dateTime") String dateTime,
             @RequestParam(name = "description") String description,
@@ -35,27 +35,27 @@ public class JspMealController extends AbstractMealController {
             update(meal, id);
         }
 
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
     @GetMapping(value = "/mealform")
-    public String getMealForm(
+    public String getForm(
             @RequestParam(name = "id", required = false) Integer id,
             Model model
     ) {
-        Meal meal = (id == null) ? new Meal() : get(id);
+        Meal meal = (id == null) ? new Meal(LocalDateTime.now(),"new meal", 777) : get(id);
         model.addAttribute("meal", meal);
         return "mealForm";
     }
 
-    @GetMapping(params = "id")
-    public String deleteMeal(@RequestParam(name = "id") Integer id) {
+    @GetMapping(value = "/delete")
+    public String erase(@RequestParam(name = "id") Integer id) {
         delete(id);
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
-    @GetMapping(params = {"startDate", "endDate", "startTime", "endTime"})
-    public String filterMeals(
+    @GetMapping(value = "/filter")
+    public String filter(
             @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @RequestParam(name = "startTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
             @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
@@ -64,11 +64,11 @@ public class JspMealController extends AbstractMealController {
     ) {
         List<MealTo> meals = getBetween(startDate, startTime, endDate, endTime);
         model.addAttribute("meals", meals);
-        return "meals";
+        return "/meals";
     }
 
     @GetMapping
-    public String getMeals(Model model) {
+    public String getAll(Model model) {
         model.addAttribute("meals", getAll());
         return "meals";
     }
