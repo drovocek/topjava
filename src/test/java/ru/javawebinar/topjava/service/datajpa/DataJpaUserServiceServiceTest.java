@@ -17,6 +17,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_MATCHER;
 public class DataJpaUserServiceServiceTest extends AbstractCashableUserServiceTest {
     @Test
     public void getWithMeals() {
+        System.out.println(cacheManager);
         User user = service.getWithMeals(USER_ID);
         USER_MATCHER.assertMatch(user, user);
         MealTestData.MEAL_MATCHER.assertMatch(user.getMeals(), MealTestData.meals);

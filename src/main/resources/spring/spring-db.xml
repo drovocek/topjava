@@ -5,14 +5,14 @@
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
-       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:jee="http://www.springframework.org/schema/jee" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+       http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
     <jdbc:initialize-database data-source="dataSource" enabled="${database.init}">
         <jdbc:script location="${jdbc.initLocation}"/>
@@ -132,13 +132,5 @@
     <beans profile="datajpa">
         <context:component-scan base-package="ru.javawebinar.**.repository.datajpa"/>
         <jpa:repositories base-package="ru.javawebinar.**.repository.datajpa"/>
-    </beans>
-
-
-    <beans profile="test">
-        <bean id="noOptCash" class="org.springframework.cache.support.NoOpCacheManager"/>
-<!--        <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">-->
-
-<!--        </bean>-->
     </beans>
 </beans>

@@ -17,4 +17,12 @@
             <bean class="org.springframework.cache.jcache.JCacheManagerFactoryBean" p:cacheManagerUri="classpath:cache/ehcache.xml"/>
         </property>
     </bean>
+
+    <beans profile="test">
+        <bean id="ehCacheManager" class="org.springframework.cache.support.NoOpCacheManager" />
+
+<!--        <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">-->
+<!--            <property name="location" value="cashRun.cfg" />-->
+<!--        </bean>-->
+    </beans>
 </beans>
