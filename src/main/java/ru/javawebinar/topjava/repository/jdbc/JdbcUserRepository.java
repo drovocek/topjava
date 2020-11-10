@@ -15,7 +15,6 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import javax.validation.Valid;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
@@ -50,18 +49,17 @@ public class JdbcUserRepository implements UserRepository {
     public User save(User user) {
         jdbcEntityValidation(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        List<Role> roles = List.copyOf(user.getRoles());
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
-            insertBatchRole(roles, user.getId());
+            insertBatchRole(user);
         } else if (
                 namedParameterJdbcTemplate.update("""
                            UPDATE users SET name=:name, email=:email, password=:password, 
                            registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id
                         """, parameterSource) == 0 |
                         jdbcTemplate.update("DELETE FROM user_roles WHERE user_id = ?", user.getId()) == 0 |
-                        insertBatchRole(roles, user.getId()).length == 0
+                        insertBatchRole(user).length == 0
         ) {
             return null;
         }
@@ -79,11 +77,10 @@ public class JdbcUserRepository implements UserRepository {
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", USER_ROW_MAPPER, id);
         User user = DataAccessUtils.singleResult(users);
-        List<Role> roles = jdbcTemplate.query("SELECT * FROM user_roles WHERE user_id=?", ROLE_ROW_MAPPER, id);
-        if (user != null) {
-            user.setRoles(Set.copyOf(roles));
+        if (user != null && addRoles(user)) {
+            return user;
         }
-        return user;
+        return null;
     }
 
     @Override
@@ -91,11 +88,10 @@ public class JdbcUserRepository implements UserRepository {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", USER_ROW_MAPPER, email);
         User user = DataAccessUtils.singleResult(users);
-        if (user != null) {
-            List<Role> roles = jdbcTemplate.query("SELECT * FROM user_roles WHERE user_id=?", ROLE_ROW_MAPPER, user.getId());
-            user.setRoles(Set.copyOf(roles));
+        if (user != null && addRoles(user)) {
+            return user;
         }
-        return user;
+        return null;
     }
 
     @Override
@@ -108,7 +104,7 @@ public class JdbcUserRepository implements UserRepository {
                 m -> {
                     Integer key = (Integer) m.get("user_id");
                     Role role = Role.valueOf((String) m.get("role"));
-                    rolePartitioningMap.putIfAbsent(key, new HashSet<>());
+                    rolePartitioningMap.computeIfAbsent(key, (k) -> new HashSet<>());
                     rolePartitioningMap.get(key).add(role);
                 }
         );
@@ -117,12 +113,14 @@ public class JdbcUserRepository implements UserRepository {
         return users;
     }
 
-    private int[] insertBatchRole(final List<Role> roles, int userId) {
+    private int[] insertBatchRole(User user) {
         return jdbcTemplate.batchUpdate("INSERT INTO user_roles VALUES(?, ?)",
                 new BatchPreparedStatementSetter() {
+                    final List<Role> roles = List.copyOf(user.getRoles());
+
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setInt(1, userId);
+                        ps.setInt(1, user.getId());
                         ps.setString(2, roles.get(i).name());
                     }
 
@@ -131,5 +129,11 @@ public class JdbcUserRepository implements UserRepository {
                         return roles.size();
                     }
                 });
+    }
+
+    private boolean addRoles(User user) {
+        List<Role> roles = jdbcTemplate.query("SELECT * FROM user_roles WHERE user_id=?", ROLE_ROW_MAPPER, user.getId());
+        user.setRoles(roles);
+        return roles.size() > 0;
     }
 }
