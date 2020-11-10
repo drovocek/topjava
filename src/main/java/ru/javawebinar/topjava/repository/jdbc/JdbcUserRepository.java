@@ -22,8 +22,8 @@ import java.util.*;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.jdbcEntityValidation;
 
+@Transactional(readOnly = true)
 @Repository
-@Transactional
 public class JdbcUserRepository implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> USER_ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
@@ -45,11 +45,12 @@ public class JdbcUserRepository implements UserRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
+    @Transactional
     @Override
-    public User save(@Valid User user) {
+    public User save(User user) {
+        jdbcEntityValidation(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         List<Role> roles = List.copyOf(user.getRoles());
-        jdbcEntityValidation(user);
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
@@ -68,6 +69,7 @@ public class JdbcUserRepository implements UserRepository {
         return user;
     }
 
+    @Transactional
     @Override
     public boolean delete(int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;

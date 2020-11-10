@@ -7,5 +7,5 @@ import static ru.javawebinar.topjava.Profiles.DATAJPA;
 import static ru.javawebinar.topjava.Profiles.TEST;
 
 @ActiveProfiles({DATAJPA, TEST})
-public class JpaUserServiceServiceTest extends AbstractCashableUserServiceTest {
+public class JpaUserServiceTest extends AbstractCashableUserServiceTest {
 }

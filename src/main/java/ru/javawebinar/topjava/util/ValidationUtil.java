@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.util;
 
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import ru.javawebinar.topjava.model.AbstractBaseEntity;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -11,10 +12,6 @@ import java.util.Set;
 public class ValidationUtil {
 
     private static Validator validator;
-
-    private ValidationUtil(Validator val) {
-        validator = val;
-    }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
         checkNotFoundWithId(object != null, id);
@@ -64,6 +61,12 @@ public class ValidationUtil {
 
     public static <T> void jdbcEntityValidation(T entity) {
         Set<ConstraintViolation<T>> violations = validator.validate(entity);
-        if (violations.size() > 0) throw new ConstraintViolationException(violations);
+        if (violations.size() > 0) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
+
+    public static void setValidator(LocalValidatorFactoryBean validator) {
+        ValidationUtil.validator = validator;
     }
 }

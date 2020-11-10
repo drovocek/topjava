@@ -15,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.TimingRules;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -50,8 +49,7 @@ abstract public class AbstractServiceTest {
         });
     }
 
-    public boolean containProfiles(String... profile){
-        List<String> activeProfiles = Arrays.asList(environment.getActiveProfiles());
-        return Arrays.stream(profile).allMatch(activeProfiles::contains);
+    public boolean containProfiles(String... profile) {
+        return List.of(environment.getActiveProfiles()).containsAll(List.of(profile));
     }
 }
