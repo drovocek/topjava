@@ -9,7 +9,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
@@ -75,21 +74,17 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Test
     public void updateWithoutRoles() {
         User newWithoutRoles = getNew();
-        newWithoutRoles.setRoles(Set.of(Role.USER, Role.ADMIN));
-
+        newWithoutRoles.setRoles(Set.of());
         int newId = service.create(newWithoutRoles).getId();
 
-        System.out.println(newId);
-        System.out.println(service.get(newId));
+        User updatedWithRoles = getUpdated();
+        updatedWithRoles.setId(newId);
+        service.update(updatedWithRoles);
 
-//        User updatedWithRoles = getUpdated();
-//        updatedWithRoles.setId(newId);
-//        service.update(updatedWithRoles);
-//
-//        User updatedWithRolesForMatching = getUpdated();
-//        updatedWithRolesForMatching.setId(newId);
-//
-//        USER_MATCHER.assertMatch(service.get(newId), updatedWithRolesForMatching);
+        User updatedWithRolesForMatching = getUpdated();
+        updatedWithRolesForMatching.setId(newId);
+
+        USER_MATCHER.assertMatch(service.get(newId), updatedWithRolesForMatching);
     }
 
     @Test

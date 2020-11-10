@@ -56,15 +56,13 @@ public class JdbcUserRepository implements UserRepository {
                 namedParameterJdbcTemplate.update("""
                            UPDATE users SET name=:name, email=:email, password=:password, 
                            registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id
-                        """, parameterSource) == 0 |
-                        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id = ?", user.getId()) == 0
+                        """, parameterSource) == 0
         ) {
             return null;
+        } else {
+            jdbcTemplate.update("DELETE FROM user_roles WHERE user_id = ?", user.getId());
         }
-        //if (user.hasRoles()) {
-            insertBatchRole(user);
-     //   }
-        System.out.println(user);
+        insertBatchRole(user);
         return user;
     }
 
@@ -78,7 +76,8 @@ public class JdbcUserRepository implements UserRepository {
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", USER_ROW_MAPPER, id);
         User user = DataAccessUtils.singleResult(users);
-        if (user != null && addRoles(user)) {
+        if (user != null) {
+            addRoles(user);
             return user;
         }
         return null;
@@ -89,7 +88,8 @@ public class JdbcUserRepository implements UserRepository {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", USER_ROW_MAPPER, email);
         User user = DataAccessUtils.singleResult(users);
-        if (user != null && addRoles(user)) {
+        if (user != null) {
+            addRoles(user);
             return user;
         }
         return null;
@@ -132,9 +132,8 @@ public class JdbcUserRepository implements UserRepository {
                 });
     }
 
-    private boolean addRoles(User user) {
+    private void addRoles(User user) {
         List<Role> roles = jdbcTemplate.query("SELECT * FROM user_roles WHERE user_id=?", ROLE_ROW_MAPPER, user.getId());
         user.setRoles(roles);
-        return roles.size() > 0;
     }
 }
