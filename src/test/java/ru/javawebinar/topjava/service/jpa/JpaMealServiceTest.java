@@ -4,8 +4,7 @@ import org.springframework.test.context.ActiveProfiles;
 import ru.javawebinar.topjava.service.AbstractMealServiceTest;
 
 import static ru.javawebinar.topjava.Profiles.JPA;
-import static ru.javawebinar.topjava.Profiles.TEST;
 
-@ActiveProfiles({JPA, TEST})
+@ActiveProfiles(JPA)
 public class JpaMealServiceTest extends AbstractMealServiceTest {
 }

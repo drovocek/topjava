@@ -1,11 +1,31 @@
 package ru.javawebinar.topjava.service.jdbc;
 
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.ActiveProfiles;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.AbstractUserServiceTest;
 
+import java.util.List;
+
 import static ru.javawebinar.topjava.Profiles.JDBC;
+import static ru.javawebinar.topjava.UserTestData.*;
 
 @ActiveProfiles(JDBC)
 public class JdbcUserServiceTest extends AbstractUserServiceTest {
 
+    @Test
+    public void a1update() {
+        System.out.println(cacheManager);
+        User updated = getUpdated();
+        service.update(updated);
+        USER_MATCHER.assertMatch(service.getAll(), getUpdated(), user); //важно: тут выполняем вызов service.getAll
+    }
+
+    @Test
+    public void a2getAll() {
+        List<User> all = service.getAll();
+        USER_MATCHER.assertMatch(all, admin, user);
+    }
 }
