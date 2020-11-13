@@ -14,10 +14,9 @@ import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.MealTestData.adminMeals;
 
 @ActiveProfiles(DATAJPA)
-public class DataJpaUserServiceServiceTest extends AbstractUserServiceTest {
+public class DataJpaUserServiceTest extends AbstractUserServiceTest {
     @Test
     public void getWithMeals() {
-        System.out.println(cacheManager);
         User user = service.getWithMeals(USER_ID);
         USER_MATCHER.assertMatch(user, UserTestData.user);
         MealTestData.MEAL_MATCHER.assertMatch(user.getMeals(), MealTestData.meals);
@@ -25,17 +24,8 @@ public class DataJpaUserServiceServiceTest extends AbstractUserServiceTest {
 
     @Test
     public void getWithMealsForManyRolesUser() {
-        System.out.println(cacheManager);
-
         User admin = service.getWithMeals(ADMIN_ID);
-
-        System.out.println(admin);
-        System.out.println(admin.getMeals());
-        System.out.println(admin.getRoles());
         USER_MATCHER.assertMatch(admin, UserTestData.admin);
-
-
-
         MealTestData.MEAL_MATCHER.assertMatch(admin.getMeals(), adminMeals);
     }
 
