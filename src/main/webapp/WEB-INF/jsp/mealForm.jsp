@@ -9,7 +9,7 @@
 <section>
     <spring:message code="meal.createMeal" var="createMeal"/>
     <spring:message code="meal.editMeal" var="editMeal"/>
-    <h2>${param.action == 'create' ? createMeal : editMeal}</h2>
+    <h2>${meal.id == null ? createMeal : editMeal}</h2>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
 
     <form method="post" action="meals">
