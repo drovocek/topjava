@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,8 +14,6 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.*;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.jdbcEntityValidation;
@@ -115,20 +112,13 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     private void insertBatchRole(User user) {
-        jdbcTemplate.batchUpdate("INSERT INTO user_roles VALUES(?, ?)",
-                new BatchPreparedStatementSetter() {
-                    final List<Role> roles = List.copyOf(user.getRoles());
+        final List<Role> roles = List.copyOf(user.getRoles());
 
-                    @Override
-                    public void setValues(PreparedStatement ps, int i) throws SQLException {
-                        ps.setInt(1, user.getId());
-                        ps.setString(2, roles.get(i).name());
-                    }
-
-                    @Override
-                    public int getBatchSize() {
-                        return roles.size();
-                    }
+        jdbcTemplate.batchUpdate(
+                "INSERT INTO user_roles (user_id, role) VALUES(?, ?)", roles, roles.size(),
+                (ps, role) -> {
+                    ps.setInt(1, user.getId());
+                    ps.setString(2, role.name());
                 });
     }
 

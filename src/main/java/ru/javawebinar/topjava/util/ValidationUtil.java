@@ -66,10 +66,7 @@ public class ValidationUtil {
     }
 
     public static <T> void jdbcEntityValidation(T entity) {
-        System.out.println("jdbcEntityValidation");
-        System.out.println(validator);
         Set<ConstraintViolation<T>> violations = validator.validate(entity);
-        System.out.println(violations);
         if (violations.size() > 0) {
             throw new ConstraintViolationException(violations);
         }
