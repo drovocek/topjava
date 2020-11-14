@@ -114,8 +114,8 @@ public class JdbcUserRepository implements UserRepository {
         return users;
     }
 
-    private int[] insertBatchRole(User user) {
-        return jdbcTemplate.batchUpdate("INSERT INTO user_roles VALUES(?, ?)",
+    private void insertBatchRole(User user) {
+        jdbcTemplate.batchUpdate("INSERT INTO user_roles VALUES(?, ?)",
                 new BatchPreparedStatementSetter() {
                     final List<Role> roles = List.copyOf(user.getRoles());
 
