@@ -61,16 +61,6 @@
     </beans>
 
     <beans profile="jdbc">
-        <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-            <property name="staticMethod" value="ru.javawebinar.topjava.util.ValidationUtil.setValidator"/>
-            <property name="arguments">
-                <list>
-                    <bean id="validatorFactoryBean"
-                          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
-                </list>
-            </property>
-        </bean>
-
         <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
         <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
             <constructor-arg ref="dataSource"/>

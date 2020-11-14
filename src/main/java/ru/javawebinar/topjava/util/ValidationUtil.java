@@ -11,7 +11,13 @@ import java.util.Set;
 
 public class ValidationUtil {
 
-    private static Validator validator;
+    private final static Validator validator;
+
+    static {
+        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+        localValidatorFactoryBean.afterPropertiesSet();
+        validator = localValidatorFactoryBean.getValidator();
+    }
 
     public static <T> T checkNotFoundWithId(T object, int id) {
         checkNotFoundWithId(object != null, id);
@@ -60,13 +66,12 @@ public class ValidationUtil {
     }
 
     public static <T> void jdbcEntityValidation(T entity) {
+        System.out.println("jdbcEntityValidation");
+        System.out.println(validator);
         Set<ConstraintViolation<T>> violations = validator.validate(entity);
+        System.out.println(violations);
         if (violations.size() > 0) {
             throw new ConstraintViolationException(violations);
         }
-    }
-
-    public static void setValidator(LocalValidatorFactoryBean validator) {
-        ValidationUtil.validator = validator;
     }
 }
