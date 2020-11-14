@@ -105,8 +105,8 @@ public class JdbcUserRepository implements UserRepository {
                 m -> {
                     Integer key = (Integer) m.get("user_id");
                     Role role = Role.valueOf((String) m.get("role"));
-                    rolePartitioningMap.computeIfAbsent(key, (k) -> new HashSet<>());
-                    rolePartitioningMap.get(key).add(role);
+                    Collection<Role> roles = rolePartitioningMap.computeIfAbsent(key, (k) -> new HashSet<>());
+                    roles.add(role);
                 }
         );
         users.forEach(u -> u.setRoles(rolePartitioningMap.get(u.getId())));
