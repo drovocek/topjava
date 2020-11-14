@@ -12,7 +12,7 @@
     <h2>${param.action == 'create' ? createMeal : editMeal}</h2>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
 
-    <form method="post" action="meals/save">
+    <form method="post" action="meals">
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt><spring:message code="meal.dateTime"/>:</dt>

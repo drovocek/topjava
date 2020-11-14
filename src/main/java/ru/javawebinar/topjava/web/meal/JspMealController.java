@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 public class JspMealController extends AbstractMealController {
 
-    @PostMapping(value = "/save")
+    @PostMapping
     public String save(
             @RequestParam(name = "id", required = false) Integer id,
             @RequestParam(name = "dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
