@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-@RequestMapping(value = "/meals")
+@RequestMapping("/meals")
 @Controller
 public class JspMealController extends AbstractMealController {
 
@@ -39,7 +39,7 @@ public class JspMealController extends AbstractMealController {
         return "redirect:/meals";
     }
 
-    @GetMapping(value = "/mealform")
+    @GetMapping("/mealform")
     public String getForm(
             @RequestParam(name = "id", required = false) Integer id,
             Model model
@@ -51,13 +51,13 @@ public class JspMealController extends AbstractMealController {
         return "mealForm";
     }
 
-    @GetMapping(value = "/delete")
+    @GetMapping("/delete")
     public String erase(@RequestParam(name = "id") Integer id) {
         delete(id);
         return "redirect:/meals";
     }
 
-    @GetMapping(value = "/filter")
+    @GetMapping("/filter")
     public String filter(
             @RequestParam(name = "startDate", required = false)
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -71,7 +71,7 @@ public class JspMealController extends AbstractMealController {
     ) {
         List<MealTo> meals = getBetween(startDate, startTime, endDate, endTime);
         model.addAttribute("meals", meals);
-        return "/meals";
+        return "meals";
     }
 
     @GetMapping
