@@ -63,7 +63,7 @@ public class User extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")//, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("dateTime DESC")
-    private Set<Meal> meals;
+    private List<Meal> meals;
 
     public User() {
     }
@@ -134,7 +134,7 @@ public class User extends AbstractNamedEntity {
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-    public Set<Meal> getMeals() {
+    public List<Meal> getMeals() {
         return meals;
     }
 
