@@ -10,9 +10,10 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.Profiles.DATAJPA;
+import static ru.javawebinar.topjava.Profiles.TESTS;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 
-@ActiveProfiles(DATAJPA)
+@ActiveProfiles({DATAJPA, TESTS})
 public class DataJpaMealServiceTest extends AbstractMealServiceTest {
     @Test
     public void getWithUser() {

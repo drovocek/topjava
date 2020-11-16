@@ -8,9 +8,10 @@ import ru.javawebinar.topjava.service.AbstractUserServiceTest;
 import java.util.List;
 
 import static ru.javawebinar.topjava.Profiles.JDBC;
+import static ru.javawebinar.topjava.Profiles.TESTS;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ActiveProfiles(JDBC)
+@ActiveProfiles({JDBC, TESTS})
 public class JdbcUserServiceTest extends AbstractUserServiceTest {
 
     @Test
