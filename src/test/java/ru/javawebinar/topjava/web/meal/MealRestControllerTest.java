@@ -15,6 +15,9 @@ import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -89,17 +92,21 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetweenInclusive() throws Exception {
-        getBetween("?startDate=2020-01-30&endDate=2020-01-30&startTime=&endTime=", List.of(meal3, meal2, meal1));
+    void getBetween() throws Exception {
+        LocalDate startDate = LocalDate.of(2020, 01, 30);
+        LocalDate endDate = startDate;
+        LocalTime startDayTime = LocalTime.MIN;
+        LocalTime endDayTime = LocalTime.MAX;
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, startDayTime);
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, endDayTime);
+
+        String uriDataParamString = getUriDataParamString(startDateTime, endDateTime);
+
+        getBetween(uriDataParamString, List.of(meal3, meal2, meal1));
     }
 
-    @Test
-    void getBetweenWithNullDates() throws Exception {
-        getBetween("?startDate=&endDate=&startTime=&endTime=", meals);
-    }
-
-    void getBetween(String uriDateParam, List<Meal> expectedResponseMeals) throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "filter" + uriDateParam))
+    private void getBetween(String uriDataParamString, List<Meal> expectedResponseMeals) throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "filter" + uriDataParamString))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEAL_TO_MATCHER.contentJson(
@@ -108,5 +115,15 @@ class MealRestControllerTest extends AbstractControllerTest {
                                 SecurityUtil.authUserCaloriesPerDay())
                         )
                 );
+    }
+
+    private String getUriDataParamString(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return new StringBuilder("?")
+                .append("startDateTime=")
+                .append(startDateTime)
+                .append("&")
+                .append("endDateTime=")
+                .append(endDateTime)
+                .toString();
     }
 }
