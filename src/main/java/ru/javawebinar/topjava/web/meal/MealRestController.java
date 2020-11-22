@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.net.URI;
@@ -58,7 +57,7 @@ public class MealRestController extends AbstractMealController {
 
     @GetMapping("/{id}")
     public MealTo getOne(@PathVariable int id) {
-        return createTo(super.get(id),false);
+        return createTo(super.get(id), false);
     }
 
     @GetMapping
