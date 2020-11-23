@@ -12,11 +12,8 @@ import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
-import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -95,8 +92,8 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getBetweenInclusive() throws Exception {
-        LocalDate startDate = LocalDate.of(2020, 01, 30);
-        LocalDate endDate = startDate;
+        String startDate = "2020-01-30";
+        String endDate = startDate;
 
         String uriDataParamString = String.format(
                 URI_DATA_PARAM_MODEL,
@@ -108,23 +105,23 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getBetweenWithNullDates() throws Exception {
-        LocalDate startDate = LocalDate.of(2020, 01, 30);
-        LocalDate endDate = startDate;
+        String startDate = "";
+        String endDate = startDate;
 
         String uriDataParamString = String.format(
                 URI_DATA_PARAM_MODEL,
-                "", "",
-                "", "");
+                startDate, "",
+                endDate, "");
 
         getBetween(uriDataParamString, meals);
     }
 
     @Test
     void getBetweenTime() throws Exception {
-        LocalDate startDate = LocalDate.of(2020, 01, 30);
-        LocalDate endDate = startDate;
-        LocalTime startTime = LocalTime.MIN;
-        LocalTime endTime = LocalTime.NOON;
+        String startDate = "2020-01-30";
+        String startTime = "00:00:00";
+        String endDate = startDate;
+        String endTime = "12:00:00";
 
         String uriDataParamString = String.format(
                 URI_DATA_PARAM_MODEL,
