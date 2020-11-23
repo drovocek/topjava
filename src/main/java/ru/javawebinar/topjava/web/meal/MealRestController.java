@@ -55,8 +55,8 @@ public class MealRestController extends AbstractMealController {
     }
 
     @GetMapping("/{id}")
-    public MealTo getOne(@PathVariable int id) {
-        return createTo(super.get(id), false);
+    public Meal getOne(@PathVariable int id) {
+        return super.get(id);
     }
 
     @GetMapping
