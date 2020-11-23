@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.UserTestData.user;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -74,6 +75,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         MealTo created = readFromJson(action, MealTo.class);
         int newId = created.getId();
         newMeal.setId(newId);
+
         MEAL_TO_MATCHER.assertMatch(created, createTestTo(newMeal));
         MEAL_TO_MATCHER.assertMatch(createTestTo(mealService.get(newId, USER_ID)), createTestTo(newMeal));
     }
@@ -86,7 +88,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(MEAL_TO_MATCHER.contentJson(
                         MealsUtil.getTos(
                                 meals,
-                                SecurityUtil.authUserCaloriesPerDay())
+                                user.getCaloriesPerDay())
                         )
                 );
     }
@@ -139,7 +141,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(MEAL_TO_MATCHER.contentJson(
                         MealsUtil.getTos(
                                 expectedResponseMeals,
-                                SecurityUtil.authUserCaloriesPerDay())
+                                user.getCaloriesPerDay())
                         )
                 );
     }
