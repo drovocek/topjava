@@ -16,7 +16,6 @@ import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -31,6 +30,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 class MealRestControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL = MealRestController.REST_URL + '/';
+    private static final String URI_DATA_PARAM_MODEL = "?startDate=%s&startTime=%s&endDate=%s&endTime=%s";
 
     @Autowired
     private MealService mealService;
@@ -92,17 +92,44 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() throws Exception {
+    void getBetweenInclusive() throws Exception {
         LocalDate startDate = LocalDate.of(2020, 01, 30);
         LocalDate endDate = startDate;
-        LocalTime startDayTime = LocalTime.MIN;
-        LocalTime endDayTime = LocalTime.MAX;
-        LocalDateTime startDateTime = LocalDateTime.of(startDate, startDayTime);
-        LocalDateTime endDateTime = LocalDateTime.of(endDate, endDayTime);
 
-        String uriDataParamString = getUriDataParamString(startDateTime, endDateTime);
+        String uriDataParamString = String.format(
+                URI_DATA_PARAM_MODEL,
+                startDate, "",
+                endDate, "");
 
         getBetween(uriDataParamString, List.of(meal3, meal2, meal1));
+    }
+
+    @Test
+    void getBetweenWithNullDates() throws Exception {
+        LocalDate startDate = LocalDate.of(2020, 01, 30);
+        LocalDate endDate = startDate;
+
+        String uriDataParamString = String.format(
+                URI_DATA_PARAM_MODEL,
+                "", "",
+                "", "");
+
+        getBetween(uriDataParamString, meals);
+    }
+
+    @Test
+    void getBetweenTime() throws Exception {
+        LocalDate startDate = LocalDate.of(2020, 01, 30);
+        LocalDate endDate = startDate;
+        LocalTime startTime = LocalTime.MIN;
+        LocalTime endTime = LocalTime.NOON;
+
+        String uriDataParamString = String.format(
+                URI_DATA_PARAM_MODEL,
+                startDate, startTime,
+                endDate, endTime);
+
+        getBetween(uriDataParamString, List.of(meal1));
     }
 
     private void getBetween(String uriDataParamString, List<Meal> expectedResponseMeals) throws Exception {
@@ -115,15 +142,5 @@ class MealRestControllerTest extends AbstractControllerTest {
                                 SecurityUtil.authUserCaloriesPerDay())
                         )
                 );
-    }
-
-    private String getUriDataParamString(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return new StringBuilder("?")
-                .append("startDateTime=")
-                .append(startDateTime)
-                .append("&")
-                .append("endDateTime=")
-                .append(endDateTime)
-                .toString();
     }
 }
