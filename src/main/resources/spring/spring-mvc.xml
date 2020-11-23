@@ -54,22 +54,11 @@
         <property name="registerDefaultFormatters" value="false"/>
         <property name="formatters">
             <set>
-                <bean class="org.springframework.format.number.NumberFormatAnnotationFormatterFactory"/>
-            </set>
-        </property>
-        <property name="formatterRegistrars">
-            <set>
-                <bean class="org.springframework.format.datetime.standard.DateTimeFormatterRegistrar">
-                    <property name="dateFormatter">
-                        <bean class="org.springframework.format.datetime.standard.DateTimeFormatterFactoryBean">
-                            <property name="iso" value="DATE"/>
-                        </bean>
-                    </property>
-                    <property name="timeFormatter">
-                        <bean class="org.springframework.format.datetime.standard.DateTimeFormatterFactoryBean">
-                            <property name="iso" value="TIME"/>
-                        </bean>
-                    </property>
+                <bean class="ru.javawebinar.topjava.util.formatter.SpringDateFormatter">
+                    <constructor-arg value="yyyy-MM-dd"/>
+                </bean>
+                <bean class="ru.javawebinar.topjava.util.formatter.SpringTimeFormatter">
+                    <constructor-arg value="HH:mm:ss"/>
                 </bean>
             </set>
         </property>
