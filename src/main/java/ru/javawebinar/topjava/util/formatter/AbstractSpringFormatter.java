@@ -2,8 +2,6 @@ package ru.javawebinar.topjava.util.formatter;
 
 import org.springframework.format.Formatter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
@@ -11,6 +9,7 @@ import java.util.Locale;
 abstract class AbstractSpringFormatter<T> implements Formatter<T> {
 
     private String pattern;
+    private DateTimeFormatter dateTimeFormatter;
 
     public AbstractSpringFormatter(String pattern) {
         this.pattern = pattern;
@@ -24,6 +23,13 @@ abstract class AbstractSpringFormatter<T> implements Formatter<T> {
     }
 
     protected DateTimeFormatter getDateFormat(Locale locale) {
-        return DateTimeFormatter.ofPattern(this.pattern, locale);
+        if (dateTimeFormatter == null) {
+            synchronized (AbstractSpringFormatter.class) {
+                if (dateTimeFormatter == null) {
+                    dateTimeFormatter = DateTimeFormatter.ofPattern(pattern, locale);
+                }
+            }
+        }
+        return dateTimeFormatter;
     }
 }
