@@ -76,3 +76,6 @@ function failNoty(jqXHR) {
         layout: "bottomRight"
     }).show();
 }
+
+let today = new Date().toISOString().substr(0, 10);
+document.querySelector("#dateTime").value = today;
