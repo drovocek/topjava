@@ -16,6 +16,7 @@ public class AdminRestController extends AbstractUserController {
 
     static final String REST_URL = "/rest/admin/users";
 
+    @Override
     @GetMapping
     public List<User> getAll() {
         return super.getAll();
@@ -50,6 +51,7 @@ public class AdminRestController extends AbstractUserController {
         super.update(user, id);
     }
 
+    @Override
     @GetMapping("/by")
     public User getByMail(@RequestParam String email) {
         return super.getByMail(email);
