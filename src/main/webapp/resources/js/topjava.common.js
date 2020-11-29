@@ -1,10 +1,15 @@
 var form;
+var id;
+
+function setId(id){
+    this.id=id;
+}
 
 function makeEditable() {
     form = $('#detailsForm');
     $(".delete").click(function () {
         if (confirm('Are you sure?')) {
-            deleteRow($(this).attr("id"));
+            deleteRow(id);
         }
     });
 
