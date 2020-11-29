@@ -18,12 +18,6 @@ $(function () {
                 {
                     "data": "calories"
                 },
-                // {
-                //     "data": "enabled"
-                // },
-                // {
-                //     "data": "registered"
-                // },
                 {
                     "defaultContent": "Edit",
                     "orderable": false
