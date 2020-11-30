@@ -43,3 +43,17 @@ $(function () {
     };
     makeEditable();
 });
+
+function enable(ckbox, id) {
+    var enabled = ckbox.is(":checked");
+    $.ajax({
+        url: ctx.ajaxUrl + id,
+        type: "PUT",
+        data: "enabled=" + enabled
+    }).done(function () {
+        ckbox.closest("tr").attr("data-userEnabled", enabled);
+        successNoty(enabled ? "common.enabled" : "common.disabled");
+    }).fail(function () {
+        $(ckbox).prop("checked", !enabled);
+    });
+}

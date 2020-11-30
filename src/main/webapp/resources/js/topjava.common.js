@@ -49,7 +49,13 @@ function save() {
         data: form.serialize()
     }).done(function () {
         $("#editRow").modal("hide");
-        updateTable();
+        console.log(ctx.ajaxUrl);
+        if(ctx.ajaxUrl.match("user/meals/")){
+            updateFilteredTable();
+        }
+        else{
+            updateTable();
+        }
         successNoty("Saved");
     });
 }
