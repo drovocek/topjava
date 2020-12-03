@@ -8,6 +8,11 @@ function updateFilteredTable() {
     }).done(updateTableByData);
 }
 
+function clearFilter() {
+    $("#filter")[0].reset();
+    $.get("profile/meals/", updateTableByData);
+}
+
 $(function () {
     ctx = {
         ajaxUrl: "profile/meals/",
