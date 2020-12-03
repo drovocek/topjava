@@ -13,10 +13,14 @@ public class TestMatcher<T> {
     private final BiConsumer<T, T> assertion;
     private final BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion;
 
-    public TestMatcher(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
+    private TestMatcher(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
         this.clazz = clazz;
         this.assertion = assertion;
         this.iterableAssertion = iterableAssertion;
+    }
+
+    public static <T> TestMatcher<T> usingAssertions(Class<T> clazz, BiConsumer<T, T> assertion, BiConsumer<Iterable<T>, Iterable<T>> iterableAssertion) {
+        return new TestMatcher<>(clazz, assertion, iterableAssertion);
     }
 
     public static <T> TestMatcher<T> usingEqualsComparator(Class<T> clazz) {
