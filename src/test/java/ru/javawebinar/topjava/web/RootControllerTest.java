@@ -38,10 +38,11 @@ class RootControllerTest extends AbstractControllerTest {
 
     @Test
     void getMeals() throws Exception {
-        perform(MockMvcRequestBuilders.get("/rest/profile/meals/")
-                .with(userHttpBasic(user)))
+        perform(MockMvcRequestBuilders.get("/meals")
+                .with(userAuth(user)))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_TO_MATCHER.contentJson(getTos(meals, user.getCaloriesPerDay())));
+                .andExpect(view().name("meals"))
+                .andExpect(forwardedUrl("/WEB-INF/jsp/meals.jsp"))
+                .andExpect(model().attribute("meals", getTos(meals, user.getCaloriesPerDay())));
     }
 }
