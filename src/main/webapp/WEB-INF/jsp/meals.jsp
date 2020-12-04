@@ -9,6 +9,10 @@
 <script type="text/javascript" src="resources/js/topjava.meals.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
+<%--<script type="text/javascript">--%>
+<%--    var localeCode = "ru";--%>
+<%--</script>--%>
+
 <div class="jumbotron pt-4">
     <div class="container">
         <h3 class="text-center"><spring:message code="meal.title"/></h3>
@@ -19,19 +23,19 @@
                     <div class="row">
                         <div class="col-3">
                             <label for="startDate"><spring:message code="meal.startDate"/></label>
-                            <input class="form-control" type="date" name="startDate" id="startDate">
+                            <input class="form-control" name="startDate" id="startDate" autocomplete="off">
                         </div>
                         <div class="col-3">
                             <label for="endDate"><spring:message code="meal.endDate"/></label>
-                            <input class="form-control" type="date" name="endDate" id="endDate">
+                            <input class="form-control" name="endDate" id="endDate" autocomplete="off">
                         </div>
                         <div class="offset-2 col-2">
                             <label for="startTime"><spring:message code="meal.startTime"/></label>
-                            <input class="form-control" type="time" name="startTime" id="startTime">
+                            <input class="form-control" name="startTime" id="startTime" autocomplete="off">
                         </div>
                         <div class="col-2">
                             <label for="endTime"><spring:message code="meal.endTime"/></label>
-                            <input class="form-control" type="time" name="endTime" id="endTime">
+                            <input class="form-control"  name="endTime" id="endTime" autocomplete="off">
                         </div>
                     </div>
                 </form>
