@@ -11,14 +11,10 @@ import java.util.Objects;
 
 public class MealTo extends BaseTo {
 
-//    @NotNull
     private final LocalDateTime dateTime;
 
-//    @NotBlank
-//    @Size(min = 2, max = 120)
     private final String description;
 
-//    @Range(min = 10, max = 5000)
     private final int calories;
 
     private final boolean excess;

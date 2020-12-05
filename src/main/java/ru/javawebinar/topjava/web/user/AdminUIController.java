@@ -13,7 +13,6 @@ import java.util.List;
 
 import static ru.javawebinar.topjava.util.ExceptionsUtil.getStringResponseEntity;
 
-
 @RestController
 @RequestMapping(value = "/admin/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminUIController extends AbstractUserController {
