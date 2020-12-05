@@ -31,18 +31,19 @@ public class Meal extends AbstractBaseEntity {
     public static final String DELETE = "Meal.delete";
     public static final String GET_BETWEEN = "Meal.getBetween";
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "date_time", nullable = false)
-    @NotNull(message = "dateTime must be not null")
+    @NotNull
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotBlank(message = "must be not empty")
+    @NotBlank
     @Size(min = 2, max = 120, message = "description size must be between 2 and 120")
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @Range(min = 10, max = 5000, message = "calories size must be between 10 and 5000")
+    @NotNull
+    @Range(min = 10, max = 5000)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
