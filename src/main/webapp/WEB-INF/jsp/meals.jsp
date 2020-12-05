@@ -9,10 +9,6 @@
 <script type="text/javascript" src="resources/js/topjava.meals.js" defer></script>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
-<%--<script type="text/javascript">--%>
-<%--    var localeCode = "ru";--%>
-<%--</script>--%>
-
 <div class="jumbotron pt-4">
     <div class="container">
         <h3 class="text-center"><spring:message code="meal.title"/></h3>
