@@ -11,7 +11,6 @@ public class ExceptionsUtil {
         String errorFieldsMsg = result.getFieldErrors().stream()
                 .map(fe -> String.format("[%s] %s", fe.getField(), fe.getDefaultMessage()))
                 .collect(Collectors.joining("<br>"));
-        System.out.println("!!!!!!!! " + errorFieldsMsg);
         return ResponseEntity.unprocessableEntity().body(errorFieldsMsg);
     }
 }
