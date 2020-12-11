@@ -23,7 +23,7 @@ public class RootController {
         return "users";
     }
 
-    @GetMapping(value = "/login")
+    @GetMapping("/login")
     public String login() {
         return "login";
     }

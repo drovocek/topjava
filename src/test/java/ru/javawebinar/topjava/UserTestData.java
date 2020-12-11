@@ -13,10 +13,12 @@ import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class UserTestData {
     public static final TestMatcher<User> USER_MATCHER = TestMatcher.usingIgnoringFieldsComparator(User.class, "registered", "meals");
+
     public static TestMatcher<User> USER_WITH_MEALS_MATCHER =
             TestMatcher.usingAssertions(User.class,
+//     No need use ignoringAllOverriddenEquals, see https://assertj.github.io/doc/#breaking-changes
                     (a, e) -> assertThat(a).usingRecursiveComparison()
-                            .ignoringFields("registered", "meals.user").ignoringAllOverriddenEquals().isEqualTo(e),
+                            .ignoringFields("registered", "meals.user").isEqualTo(e),
                     (a, e) -> {
                         throw new UnsupportedOperationException();
                     });
