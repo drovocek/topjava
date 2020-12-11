@@ -1,4 +1,12 @@
-var ctx, userAjaxUrl = "admin/users/";
+var userAjaxUrl = "admin/users/";
+
+// https://stackoverflow.com/a/5064235/548473
+var ctx = {
+    ajaxUrl: userAjaxUrl,
+    updateTable: function () {
+        $.get(userAjaxUrl, updateTableByData);
+    }
+}
 
 function enable(chkbox, id) {
     var enabled = chkbox.is(":checked");
@@ -17,76 +25,62 @@ function enable(chkbox, id) {
 
 // $(document).ready(function () {
 $(function () {
-    // https://stackoverflow.com/a/5064235/548473
-    ctx = {
-        ajaxUrl: userAjaxUrl,
-        datatableApi: $("#datatable").DataTable({
-            "ajax": {
-                "url": userAjaxUrl,
-                "dataSrc": ""
+    makeEditable({
+        "columns": [
+            {
+                "data": "name"
             },
-            "paging": false,
-            "info": true,
-            "columns": [
-                {
-                    "data": "name"
-                },
-                {
-                    "data": "email",
-                    "render": function (data, type, row) {
-                        if (type === "display") {
-                            return "<a href='mailto:" + data + "'>" + data + "</a>";
-                        }
-                        return data;
+            {
+                "data": "email",
+                "render": function (data, type, row) {
+                    if (type === "display") {
+                        return "<a href='mailto:" + data + "'>" + data + "</a>";
                     }
-                },
-                {
-                    "data": "roles"
-                },
-                {
-                    "data": "enabled",
-                    "render": function (data, type, row) {
-                        if (type === "display") {
-                            return "<input type='checkbox' " + (data ? "checked" : "") + " onclick='enable($(this)," + row.id + ");'/>";
-                        }
-                        return data;
-                    }
-                },
-                {
-                    "data": "registered",
-                    "render": function (date, type, row) {
-                        if (type === "display") {
-                            return date.substring(0, 10);
-                        }
-                        return date;
-                    }
-                },
-                {
-                    "orderable": false,
-                    "defaultContent": "",
-                    "render": renderEditBtn
-                },
-                {
-                    "orderable": false,
-                    "defaultContent": "",
-                    "render": renderDeleteBtn
+                    return data;
                 }
-            ],
-            "order": [
-                [
-                    0,
-                    "asc"
-                ]
-            ],
-            "createdRow": function (row, data, dataIndex) {
-                if (!data.enabled) {
-                    $(row).attr("data-userEnabled", false);
+            },
+            {
+                "data": "roles"
+            },
+            {
+                "data": "enabled",
+                "render": function (data, type, row) {
+                    if (type === "display") {
+                        return "<input type='checkbox' " + (data ? "checked" : "") + " onclick='enable($(this)," + row.id + ");'/>";
+                    }
+                    return data;
                 }
+            },
+            {
+                "data": "registered",
+                "render": function (date, type, row) {
+                    if (type === "display") {
+                        return date.substring(0, 10);
+                    }
+                    return date;
+                }
+            },
+            {
+                "orderable": false,
+                "defaultContent": "",
+                "render": renderEditBtn
+            },
+            {
+                "orderable": false,
+                "defaultContent": "",
+                "render": renderDeleteBtn
             }
-        }),
-        updateTable: function () {
-            $.get(userAjaxUrl, updateTableByData);
+        ],
+        "order": [
+            [
+                0,
+                "asc"
+            ]
+        ],
+        "createdRow": function (row, data, dataIndex) {
+            if (!data.enabled) {
+                $(row).attr("data-userEnabled", false);
+            }
         }
-    };
-    makeEditable();
+    });
 });
