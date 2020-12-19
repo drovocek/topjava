@@ -50,7 +50,7 @@
                                placeholder="<spring:message code="user.name"/>">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" ${status.error ? 'has-error' : ''}>
                         <label for="email" class="col-form-label"><spring:message code="user.email"/></label>
                         <input type="email" class="form-control" id="email" name="email"
                                placeholder="<spring:message code="user.email"/>">
