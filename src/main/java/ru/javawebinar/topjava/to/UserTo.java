@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.to;
 
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.SafeHtml;
 import ru.javawebinar.topjava.HasIdAndEmail;
 import ru.javawebinar.topjava.util.UserUtil;
 
@@ -10,16 +11,20 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
+import static org.hibernate.validator.constraints.SafeHtml.WhiteListType.NONE;
+
 public class UserTo extends BaseTo implements HasIdAndEmail, Serializable {
     private static final long serialVersionUID = 1L;
 
     @NotBlank
     @Size(min = 2, max = 100)
+    @SafeHtml(whitelistType = NONE)
     private String name;
 
     @Email
     @NotBlank
     @Size(max = 100)
+    @SafeHtml(whitelistType = NONE) // https://stackoverflow.com/questions/17480809
     private String email;
 
     @NotBlank
