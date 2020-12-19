@@ -74,8 +74,16 @@
         <constructor-arg ref="messageSource"/>
     </bean>
 
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="ru"/>
+    </bean>
+
     <mvc:interceptors>
         <bean class="ru.javawebinar.topjava.web.interceptor.ModelInterceptor"/>
+
+        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+            <property name="paramName" value="lang"/>
+        </bean>
     </mvc:interceptors>
 
     <!--    https://stackoverflow.com/a/23615478/548473-->
