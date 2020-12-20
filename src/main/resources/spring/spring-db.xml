@@ -79,7 +79,8 @@
         <context:property-placeholder location="classpath:/db/heroku.properties" system-properties-mode="OVERRIDE"/>
 
         <bean class="java.net.URI" id="dbUrl">
-            <constructor-arg value="${DATABASE_URL}"/>
+<!--            <constructor-arg value="${DATABASE_URL}"/>-->
+            <constructor-arg value="#{systemEnvironment['DATABASE_URL']}"/>
         </bean>
         <bean id="dataSource"
               class="org.apache.tomcat.jdbc.pool.DataSource"
